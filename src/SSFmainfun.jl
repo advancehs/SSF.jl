@@ -617,7 +617,7 @@ function ssfmodel_fit(sfdat::DataFrame) #, D1::Dict = _dicM, D2::Dict = _dicINI,
      #* ------ Check if the matrix is invertible. ----
 
      var_cov_matrix = try
-                         inv(numerical_hessian)
+                         pinv(numerical_hessian)
                       catch err 
                          redflag = 1
                          checkCollinear(tagD[:modelid], xvar, zvar, qvar, uvar, vvar) # check if it is b/c of multi-collinearity in the data         
