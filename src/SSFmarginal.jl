@@ -150,7 +150,7 @@ end
 
 function marg_smah( # PorC::Int64, 
   cc, Mₜ, pos::NamedTuple, coef::Array{Float64, 1},
-  Zmarg, Qmarg, Umarg)
+  Qmarg, Umarg)
 
 
   # z_pre = @. Zmarg*coef[pos.begz : pos.endz]  # mu, a scalar
@@ -219,10 +219,9 @@ function get_marg(::Type{SMAH}, # PorC::Int64,
                   cc = findall(x->x==index,yr)
                   h̃_c = h̃[cc,:]
                   @views marg = ForwardDiff.gradient(marg -> marg_smah(cc,Mₜ, pos, coef, 
-                                                          marg[1 : num.nofz*N_ind],
                                                           marg[num.nofz*N_ind+1 : num.nofz*N_ind+num.nofq*N_ind],
                                                           marg[num.nofz*N_ind+num.nofq*N_ind+1 : num.nofmarg*N_ind]),
-                                                          vcat( Z[yr,:], Q[yr,:], U[yr,:]) );                            
+                                                          vcat(  Q[yr,:], U[yr,:]) );                            
 
                 mm_z[:,index] = marg[1 : num.nofz*N_ind][cc,:]
                 mm_q[:,index] = marg[num.nofz*N_ind+1 : num.nofz*N_ind+num.nofq*N_ind][cc,:]
@@ -369,7 +368,7 @@ end
 
 function marg_sarh( # PorC::Int64, 
   cc, Mₜ, pos::NamedTuple, coef::Array{Float64, 1},
-  Zmarg, Qmarg, Umarg)
+  Qmarg, Umarg)
 
 
   # z_pre = @. Zmarg*coef[pos.begz : pos.endz]  # mu, a scalar
@@ -438,7 +437,6 @@ function get_marg(::Type{SARH}, # PorC::Int64,
                   cc = findall(x->x==index,yr)
                   h̃_c = h̃[cc,:]
                   @views marg = ForwardDiff.gradient(marg -> marg_sarh(cc,Mₜ, pos, coef, 
-                                                          marg[1 : num.nofz*N_ind],
                                                           marg[num.nofz*N_ind+1 : num.nofz*N_ind+num.nofq*N_ind],
                                                           marg[num.nofz*N_ind+num.nofq*N_ind+1 : num.nofmarg*N_ind]),
                                                           vcat( Z[yr,:], Q[yr,:], U[yr,:]) );                            
