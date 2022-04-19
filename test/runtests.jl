@@ -1891,8 +1891,8 @@ end
     table_format(html),
     message = false)
 
-    res =  ssfmodel_fit()
-    @test  res.converged == true
+    # res =  ssfmodel_fit()
+    # @test  res.converged == true
 
 
     aa, bb = get_marg(SMAT, posvec, nofvar, rho2, v, q, u,W,idt)
@@ -1901,6 +1901,44 @@ end
 	@test bb[1] ≈ 703.32487 atol = 1e-5
 
 	
+
+
+
+	ssfmodel_spec(ssfpanel(SMA), ssftype(prod), ssfdist(half), timevar(tvar), idvar(ivar), 
+	             depvar(y), frontier(x),μ(z), hscale(q),  σᵤ²(v), σᵥ²(v),ρ(0.1),
+                 τ(0.1),
+                 weight(W))
+
+    ssfmodel_init(  #frontier([0.1,0.1]),             # may skip and use default
+    
+    hscale([0.1]),              
+    σᵤ²([-0.1,]),    # may use a vector
+    σᵥ²([-0.1]) ,
+    ρ(-0.1),
+    τ(0.1) )    
+
+    ssfmodel_opt(warmstart_solver(NelderMead()),   
+    warmstart_maxIT(200),
+    main_solver(Newton()), 
+    main_maxIT(2000), 
+    tolerance(1e-8),
+    verbose(true),
+    banner(true),
+    ineff_index(true),
+    marginal(true),
+    rii(true),
+    table_format(html),
+    message = false)
+
+    res =  ssfmodel_fit()
+    @test  res.converged == true
+
+
+
+
+
+
+
 	
 end
 
