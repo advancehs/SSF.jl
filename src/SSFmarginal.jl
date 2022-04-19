@@ -453,7 +453,7 @@ function get_marg(::Type{SARH}, # PorC::Int64,
 
   #* purge off the constant var's marginal effect from the DataFrame
   margeff = nonConsDataFrame(margeff, Q)
-  mm_u = nonConsDataFrame(mm_q, U)
+  mm_u    = nonConsDataFrame(mm_u, U)
 
 
   #* if same var in different equations, add up the marg eff
