@@ -144,7 +144,7 @@ end
 
 # ER
 #? --------------------------------------------------------------------
-#? - panel FE SWA, half normal, marginal effect function -
+#? - panel FE SMA, half normal, marginal effect function -
 #? -------------------------------------------------------------------- 
 
 
@@ -223,24 +223,24 @@ function get_marg(::Type{SMAH}, # PorC::Int64,
                                                           marg[num.nofz*N_ind+num.nofq*N_ind+1 : num.nofmarg*N_ind]),
                                                           vcat(  Q[yr,:], U[yr,:]) );                            
 
-                mm_z[:,index] = marg[1 : num.nofz*N_ind][cc,:]
+                # mm_z[:,index] = marg[1 : num.nofz*N_ind][cc,:]
                 mm_q[:,index] = marg[num.nofz*N_ind+1 : num.nofz*N_ind+num.nofq*N_ind][cc,:]
                 mm_u[:,index] = marg[num.nofz*N_ind+num.nofq*N_ind+1 : end][cc,:]
 
                end  # for i in 1:num.nofobs
             end  # for yr in 1:nofyear  
-  margeff = DataFrame(mm_z', _dicM[:μ]) # the base set
-  mm_q = DataFrame(mm_q', _dicM[:hscale])
+  # margeff = DataFrame(mm_z', _dicM[:μ]) # the base set
+  margeff = DataFrame(mm_q', _dicM[:hscale])
   mm_u = DataFrame(mm_u', _dicM[:σᵤ²])
 
   #* purge off the constant var's marginal effect from the DataFrame
-  margeff = nonConsDataFrame(margeff, Z)
-  mm_q = nonConsDataFrame(mm_q, Q)
-  mm_u = nonConsDataFrame(mm_u, U)
+  margeff = nonConsDataFrame(margeff, Q)
+  mm_u    = nonConsDataFrame(mm_u, U)
+
 
   #* if same var in different equations, add up the marg eff
-  margeff = addDataFrame(margeff, mm_q)
   margeff = addDataFrame(margeff, mm_u)
+
 
    #* prepare info for printing
    margMean = (; zip(Symbol.(names(margeff)) , round.(mean.(eachcol(margeff)); digits=5))...)
@@ -253,7 +253,7 @@ function get_marg(::Type{SMAH}, # PorC::Int64,
 end  
 
 
-#SAN
+# SAN
 #? --------------------------------------------------------------------
 #? - panel FE SAR, truncated normal, marginal effect function -
 #? -------------------------------------------------------------------- 
@@ -283,9 +283,9 @@ function marg_sart( # PorC::Int64,
 end   
 
 
-#? -- panel FE SWA, truncated normal, , get marginal effect ----
+#? -- panel FE SAR, truncated normal, , get marginal effect ----
 
-function get_marg(::Type{SMAT}, # PorC::Int64, 
+function get_marg(::Type{SART}, # PorC::Int64, 
   pos::NamedTuple, num::NamedTuple, coef::Array{Float64, 1}, 
   Z::Matrix, Q::Matrix, U::Matrix,WA::Matrix,idt::Matrix{Any})
 
@@ -439,26 +439,26 @@ function get_marg(::Type{SARH}, # PorC::Int64,
                   @views marg = ForwardDiff.gradient(marg -> marg_sarh(cc,Mₜ, pos, coef, 
                                                           marg[num.nofz*N_ind+1 : num.nofz*N_ind+num.nofq*N_ind],
                                                           marg[num.nofz*N_ind+num.nofq*N_ind+1 : num.nofmarg*N_ind]),
-                                                          vcat( Z[yr,:], Q[yr,:], U[yr,:]) );                            
+                                                          vcat(   Q[yr,:], U[yr,:]) );                            
 
-                mm_z[:,index] = marg[1 : num.nofz*N_ind][cc,:]
+                # mm_z[:,index] = marg[1 : num.nofz*N_ind][cc,:]
                 mm_q[:,index] = marg[num.nofz*N_ind+1 : num.nofz*N_ind+num.nofq*N_ind][cc,:]
                 mm_u[:,index] = marg[num.nofz*N_ind+num.nofq*N_ind+1 : end][cc,:]
 
                end  # for i in 1:num.nofobs
             end  # for yr in 1:nofyear  
-  margeff = DataFrame(mm_z', _dicM[:μ]) # the base set
-  mm_q = DataFrame(mm_q', _dicM[:hscale])
+  # margeff = DataFrame(mm_z', _dicM[:μ]) # the base set
+  margeff = DataFrame(mm_q', _dicM[:hscale])
   mm_u = DataFrame(mm_u', _dicM[:σᵤ²])
 
   #* purge off the constant var's marginal effect from the DataFrame
-  margeff = nonConsDataFrame(margeff, Z)
-  mm_q = nonConsDataFrame(mm_q, Q)
-  mm_u = nonConsDataFrame(mm_u, U)
+  margeff = nonConsDataFrame(margeff, Q)
+  mm_u = nonConsDataFrame(mm_q, U)
+
 
   #* if same var in different equations, add up the marg eff
-  margeff = addDataFrame(margeff, mm_q)
   margeff = addDataFrame(margeff, mm_u)
+
 
    #* prepare info for printing
    margMean = (; zip(Symbol.(names(margeff)) , round.(mean.(eachcol(margeff)); digits=5))...)

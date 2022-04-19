@@ -112,7 +112,7 @@ end
 
 
 
-
+# yi
   #?--------- panel FE SWA, truncated normal ----------------
   
   function getvar(::Type{SMAT}, dat::DataFrame)
@@ -266,8 +266,8 @@ end
   
 
 
-
-  #?--------- panel FE SWA, half normal ----------------
+#er
+  #?--------- panel FE SMA, half normal ----------------
   
   function getvar(::Type{SMAH}, dat::DataFrame)
   
@@ -419,8 +419,8 @@ end
   
   end
   
-
-  #?--------- panel FE SWA, truncated normal ----------------
+#san
+  #?--------- panel FE SAR, truncated normal ----------------
   
   function getvar(::Type{SART}, dat::DataFrame)
   
@@ -573,7 +573,7 @@ end
   
 
 
-
+# SI
   #?--------- panel FE SAR, half normal ----------------
   
   function getvar(::Type{SARH}, dat::DataFrame)
